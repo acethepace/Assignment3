@@ -14,7 +14,14 @@
         id="@+id/tab_external"
         icon="@drawable/ic_document"
         barColorWhenSelected="@color/yellow"
-        title="External" />
+        title="Private" />
+
+    <tab
+        id="@+id/tab_external_2"
+        icon="@drawable/ic_document"
+        barColorWhenSelected="@color/blue"
+        title="Public" />
+
     <tab
         id="@+id/tab_internal"
         icon="@drawable/ic_file"

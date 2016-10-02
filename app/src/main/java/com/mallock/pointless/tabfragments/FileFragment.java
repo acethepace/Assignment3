@@ -106,8 +106,12 @@ public class FileFragment extends Fragment {
 
     public File getPublicFile(String albumName) {
         // Get the directory for the user's public pictures "directory.
-        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pointless");
-        if (!dir.mkdirs()) {
+        File dir1 = Environment.getExternalStorageDirectory();
+
+        File dir = new File(dir1.getAbsolutePath()+"/Pointless");
+        if (!dir.exists()) {
+            dir.mkdirs();
+            dir.mkdir();
             Log.e(TAG, "Directory not created");
         }
         File file = new File(dir, albumName);

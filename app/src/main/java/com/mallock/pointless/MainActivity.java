@@ -21,6 +21,7 @@ import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
 import static com.mallock.pointless.datautils.Constants.FILE_EXTERNAL_PRIVATE;
+import static com.mallock.pointless.datautils.Constants.FILE_EXTERNAL_PUBLIC;
 import static com.mallock.pointless.datautils.Constants.FILE_INTERNAL;
 
 public class MainActivity extends FragmentActivity {
@@ -113,6 +114,27 @@ public class MainActivity extends FragmentActivity {
                             }
                             Bundle args = new Bundle();
                             args.putInt("internal", FILE_EXTERNAL_PRIVATE);
+                            newFragment.setArguments(args);
+                            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                            transaction.replace(R.id.fragment_container, newFragment);
+                            transaction.addToBackStack(null);
+                            transaction.commit();
+                        }
+                        break;
+
+                    case R.id.tab_external_2:
+                        if (findViewById(R.id.fragment_container) != null) {
+                            if (savedInstanceState != null) {
+                                return;
+                            }
+                            Fragment newFragment;
+                            if (currentUser == null) {
+                                newFragment = new NotLoggedInFragment();
+                            } else {
+                                newFragment = new FileFragment();
+                            }
+                            Bundle args = new Bundle();
+                            args.putInt("internal", FILE_EXTERNAL_PUBLIC);
                             newFragment.setArguments(args);
                             FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
                             transaction.replace(R.id.fragment_container, newFragment);
