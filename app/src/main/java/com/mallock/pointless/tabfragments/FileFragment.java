@@ -111,7 +111,6 @@ public class FileFragment extends Fragment {
         File dir = new File(dir1.getAbsolutePath()+"/Pointless");
         if (!dir.exists()) {
             dir.mkdirs();
-            dir.mkdir();
             Log.e(TAG, "Directory not created");
         }
         File file = new File(dir, albumName);
