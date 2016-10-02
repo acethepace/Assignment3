@@ -1,0 +1,23 @@
+<tabs>
+    <tab
+        id="@+id/tab_login"
+        icon="@drawable/ic_user1"
+        title="Login"
+        barColorWhenSelected="@color/fuchsia"
+        />
+    <tab
+        id="@+id/tab_browse"
+        icon="@drawable/ic_looking_houses1"
+        barColorWhenSelected="@color/purple"
+        title="Browse" />
+    <tab
+        id="@+id/tab_external"
+        icon="@drawable/ic_document"
+        barColorWhenSelected="@color/yellow"
+        title="External" />
+    <tab
+        id="@+id/tab_internal"
+        icon="@drawable/ic_file"
+        barColorWhenSelected="@color/orange"
+        title="Internal" />
+</tabs>

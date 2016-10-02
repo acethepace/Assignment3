@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Pointless</string>
+    <string name="not_logged_in_2">You\'re missing out on a pointless app developed with ❤ @ IIIT-D.</string>
+    <string name="not_logged_in">NOT LOGGED IN</string>
+    <string name="internal_storage_advice">This is in your internal storage. Data stored here will not be available to other applications. Upon uninstalling the Pointless app this data will be lost.</string>
+    <string name="external_storage_public_advice">This is in your SD card. Data stored here will not be available to other applications. Upon uninstalling the Pointless app this data will not be lost.</string>
+    <string name="external_storage_private_advice">This is in your SD card. All data stored here will be available to other applications. Upon uninstalling the Pointless app this data will be lost.</string>
+    <string name="file_input_hint">This is your space</string>
+    <string name="save">SAVE</string>
+    <string name="update">UPDATE</string>
+</resources>

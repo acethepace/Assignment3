@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/storage_advice_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:elegantTextHeight="true"
+        android:text="@string/internal_storage_advice"
+        android:textColor="@color/red"
+        android:textSize="18sp" />
+
+    <EditText
+        android:id="@+id/editText"
+        android:padding="10dp"
+        android:layout_margin="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_alignParentBottom="true"
+        android:layout_weight="0.9"
+        android:ems="10"
+        android:textColorHint="@color/lighter_grey"
+        android:textColor="@color/texts"
+        android:gravity="left|top"
+        android:hint="@string/file_input_hint"
+        android:inputType="textMultiLine"
+        android:scrollbars="vertical"/>
+
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"/>
+</LinearLayout>
