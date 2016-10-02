@@ -18,9 +18,13 @@ import android.widget.Toast;
 import com.mallock.pointless.MainActivity;
 import com.mallock.pointless.R;
 
-import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import static com.mallock.pointless.datautils.Constants.FILE_EXTERNAL_PRIVATE;
 import static com.mallock.pointless.datautils.Constants.FILE_EXTERNAL_PUBLIC;
@@ -38,8 +42,13 @@ public class FileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.internal_file_fragment, container, false);
+        internal = getArguments().getInt("internal");
         final Button saveButton = (Button) view.findViewById(R.id.save_button);
         final EditText et = (EditText) view.findViewById(R.id.editText);
+        String data = readData();
+        if (data != null && data != "") {
+            et.setText(data);
+        }
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -47,7 +56,6 @@ public class FileFragment extends Fragment {
             }
         });
         TextView advice = (TextView) view.findViewById(R.id.storage_advice_text);
-        internal = getArguments().getInt("internal");
         switch (internal) {
             case FILE_INTERNAL:
                 break;
@@ -67,8 +75,7 @@ public class FileFragment extends Fragment {
      * write data to file
      */
     public void saveData(String string) {
-        String filename = ((MainActivity) getActivity()).currentUser.getUsername();
-        Toast.makeText(getActivity(), "Data saved to " + (internal == FILE_INTERNAL ? "internal" : "external") + " storage", Toast.LENGTH_SHORT).show();
+        String filename = ((MainActivity) getActivity()).currentUser.getUsername() + ".txt";
         if (FILE_INTERNAL == internal) {
             FileOutputStream outputStream;
 
@@ -82,27 +89,38 @@ public class FileFragment extends Fragment {
         } else {
             if (isExternalStorageWritable()) {
                 File file = (FILE_EXTERNAL_PRIVATE == internal) ? getPrivateFile(filename) : getPublicFile(filename);
-                
+                try {
+                    FileOutputStream outputStream = new FileOutputStream(file);
+                    outputStream.write(string.getBytes());
+                    outputStream.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getContext(), "not writable", Toast.LENGTH_SHORT).show();
             }
         }
+        Toast.makeText(getActivity(), "Data saved to " + (internal == FILE_INTERNAL ? "internal" : "external") + " storage", Toast.LENGTH_SHORT).show();
+
     }
 
     public File getPublicFile(String albumName) {
-        // Get the directory for the user's public pictures directory.
-        File file = new File(Environment.getExternalStoragePublicDirectory(
-                "/Pointless/"), albumName);
-        if (!file.mkdirs()) {
+        // Get the directory for the user's public pictures "directory.
+        File dir = new File(Environment.getExternalStorageDirectory().getAbsolutePath()+"/Pointless");
+        if (!dir.mkdirs()) {
             Log.e(TAG, "Directory not created");
         }
+        File file = new File(dir, albumName);
         return file;
     }
 
-    public File getPrivateFile(String albumName) {
+    public File getPrivateFile(String filename) {
         // Get the directory for the app's private pictures directory.
-        File file = new File(getActivity().getExternalFilesDir("/Pointless/"), albumName);
-        if (!file.mkdirs()) {
+        File dir = new File(getActivity().getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)+"/Pointless");
+        if (!dir.mkdirs()) {
             Log.e(TAG, "Directory not created");
         }
+        File file = new File(dir, filename);
         return file;
 
     }
@@ -110,8 +128,44 @@ public class FileFragment extends Fragment {
     /**
      * Read data from file
      */
-    public void readData() {
+    public String readData() {
+        StringBuilder stringBuilder = new StringBuilder();
+        String filename = ((MainActivity) getActivity()).currentUser.getUsername() + ".txt";
+        Toast.makeText(getActivity(), "Data read from " + (internal == FILE_INTERNAL ? "internal" : "external") + " storage", Toast.LENGTH_SHORT).show();
+        if (FILE_INTERNAL == internal) {
+            try {
+                FileInputStream fis = getActivity().openFileInput(filename);
+                InputStreamReader isr = new InputStreamReader(fis);
+                BufferedReader bufferedReader = new BufferedReader(isr);
+                String line;
+                while ((line = bufferedReader.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            if (isExternalStorageReadable()) {
+                File file = (FILE_EXTERNAL_PRIVATE == internal) ? getPrivateFile(filename) : getPublicFile(filename);
+                try {
+                    BufferedReader br = new BufferedReader(new FileReader(file));
+                    String line = br.readLine();
 
+                    while (line != null) {
+                        stringBuilder.append(line);
+                        stringBuilder.append(System.lineSeparator());
+                        line = br.readLine();
+                    }
+
+                    br.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(getContext(), "not writable", Toast.LENGTH_SHORT).show();
+            }
+        }
+        return stringBuilder.toString();
     }
 
     /* Checks if external storage is available for read and write */
